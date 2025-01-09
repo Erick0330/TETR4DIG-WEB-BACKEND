@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+  rol      String
+}
+
+
+model Questions {
+  id_question  Int     @id @default(autoincrement())
+  question     String
+  points       Int
+  id_dimension Int
+  deleted      Boolean @default(false)
+  dimension Dimensions @relation(fields: [id_dimension], references: [id_dimension])
+}
+
+
+model Dimensions {
+  id_dimension     Int @id @default(autoincrement())
+  name_dimension   String
+  questions_amount Int @default(0)
+  points           Int
+  id_perspective   Int
+  deleted          Boolean @default(false)
+  questions Questions[]
+  perspective Perspectives @relation(fields: [id_perspective], references: [id_perspective])
+}
+
+model Perspectives {
+  id_perspective Int @id @default(autoincrement())
+  id_ambit Int
+  points Int
+  questions_amount Int  @default(0)
+  perspective_name String
+  deleted Boolean @default(false)
+  dimensions Dimensions[]
+  ambit Ambits @relation(fields: [id_ambit], references: [id_ambit])
+}
+
+model Ambits {
+  id_ambit Int @id @default(autoincrement())
+  ambit String
+  points Int
+  questions_amount Int @default(0)
+  delete Boolean @default(false)
+  perspective Perspectives[]
+}

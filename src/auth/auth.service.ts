@@ -21,12 +21,18 @@ export class AuthService {
             throw new BadRequestException('User already exist')
         }
 
-        return await this.usersService.create({
+        await this.usersService.create({
             name,
             email,
             rol,
             password: await bcryptjs.hash(password, 10)
         });
+
+        return {
+            name,
+            email,
+            rol
+        }
     }
 
     async login({email, password}: LoginDto) {

@@ -6,6 +6,7 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 
 @Controller('ambit')
 @ApiTags('Ambits')
@@ -13,8 +14,7 @@ export class AmbitController {
   constructor(private readonly ambitService: AmbitService) { }
 
   @Post()
-  @Roles('ADMIN')
-  @UseGuards(AuthGuard, RolesGuard)
+  @Auth('ADMIN')
   @ApiBearerAuth()
   create(@Body() createAmbitDto: CreateAmbitDto) {
     return this.ambitService.create(createAmbitDto);
@@ -26,16 +26,14 @@ export class AmbitController {
   }
 
   @Get(':id')
-  @Roles('ADMIN')
-  @UseGuards(AuthGuard, RolesGuard)
+  @Auth('ADMIN')
   @ApiBearerAuth()
   findOne(@Param('id') id: string) {
     return this.ambitService.findOne(+id);
   }
 
   @Patch(':id')
-  @Roles('ADMIN')
-  @UseGuards(AuthGuard, RolesGuard)
+  @Auth('ADMIN')
   @ApiBearerAuth()
   update(@Param('id') id: string, @Body() updateambitDto: UpdateAmbitDto) {
 
@@ -44,8 +42,7 @@ export class AmbitController {
   }
 
   @Delete(':id')
-  @Roles('ADMIN')
-  @UseGuards(AuthGuard, RolesGuard)
+  @Auth('ADMIN')
   @ApiBearerAuth()
   remove(@Param('id') id: string) {
     return this.ambitService.remove(+id);

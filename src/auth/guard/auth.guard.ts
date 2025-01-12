@@ -26,9 +26,9 @@ import { envs } from 'src/config';
       const payload = await this.jwtService.verifyAsync(token, {
         secret: envs.jwtConstants.secret,
       });
-      console.log(payload);
+      console.log("Request.user sin pay load: " + request.user)
       request.user = payload;
-      console.log(request.user);
+      console.log(request.user)
     } catch (error) {
       throw new UnauthorizedException();
     }

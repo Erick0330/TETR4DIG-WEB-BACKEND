@@ -13,12 +13,16 @@ export class UsersService extends PrismaClient implements OnModuleInit {
 
   create(createUserDto: CreateUserDto) {
 
-    if (createUserDto.rol === 'ADMIN' || createUserDto.rol === 'USER')
       return this.users.create({
-        data: createUserDto
+        data: createUserDto,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          rol: true
+        }
       });
-    else
-    throw new BadRequestException("El rol solo pude ser de tipo ADMIN o USER")
+
   }
 
   async findOneByEmail(email: string) {
@@ -33,13 +37,26 @@ export class UsersService extends PrismaClient implements OnModuleInit {
   }
 
   async findAll() {
-    return await this.users.findMany();
+    return await this.users.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        rol: true
+      }
+    });
   }
 
   async findOne(id: number) {
     const user = await this.users.findUnique({
       where: {
         id
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        rol: true
       }
     });
 
@@ -62,6 +79,12 @@ export class UsersService extends PrismaClient implements OnModuleInit {
     return this.users.update({
       where: { id },
       data: updateUserDto,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        rol: true
+      }
     });
   }
 
@@ -77,7 +100,13 @@ export class UsersService extends PrismaClient implements OnModuleInit {
       throw new NotFoundException(`User with id ${id} not found`);
 
     return this.users.delete({
-      where: { id }
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        rol: true
+      }
     })
   }
 

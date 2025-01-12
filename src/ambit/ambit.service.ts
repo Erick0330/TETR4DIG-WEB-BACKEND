@@ -32,6 +32,7 @@ export class AmbitService extends PrismaClient implements OnModuleInit {
       }
     });
 
+
     if (!ambit)
       throw new NotFoundException(`Ambit with id ${id} not found`);
 

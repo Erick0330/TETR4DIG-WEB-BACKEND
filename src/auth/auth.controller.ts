@@ -8,12 +8,12 @@ import { Roles } from './decorators/roles.decorator';
 import { RolesGuard } from './guard/roles.guard';
 import { ApiTags } from '@nestjs/swagger';
 
-interface RequestWithUser extends Request {
-    user: {
-        email: string;
-        rol: string;
-    }
-}
+// interface RequestWithUser extends Request {
+//     user: {
+//         email: string;
+//         rol: string;
+//     }
+// }
 
 @Controller('auth')
 @ApiTags('Auth')

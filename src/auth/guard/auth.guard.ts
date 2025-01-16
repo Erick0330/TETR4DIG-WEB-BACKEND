@@ -17,7 +17,7 @@ import { envs } from 'src/config';
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     
-    
+    console.log(token)
     if(!token){
       throw new UnauthorizedException();
     }
@@ -30,6 +30,7 @@ import { envs } from 'src/config';
       request.user = payload;
       console.log(request.user)
     } catch (error) {
+      console.log('entrooooo')
       throw new UnauthorizedException();
     }
 
@@ -37,8 +38,20 @@ import { envs } from 'src/config';
   }
 
   private extractTokenFromHeader(request: Request) {
-    const [type, token] = request.headers.authorization?.split(" ") ?? [];
-    return type === "Bearer" ? token : undefined;
+    const authorizationHeader = request.headers.authorization;
+    if (!authorizationHeader) {
+      console.log("Authorization header missing");
+      return undefined;
+    }
+  
+    const [type, token] = authorizationHeader.split(" ");
+    if (type !== "Bearer") {
+      console.log("Authorization header has incorrect type:", type);
+      return undefined;
+    }
+  
+    console.log("Extracted token:", token);
+    return token;
   }
 
 }

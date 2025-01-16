@@ -32,6 +32,12 @@ export class PerspectiveController {
     return this.perspectiveService.findOne(+id);
   }
 
+  @Get('ambit/:id')
+  @ApiBearerAuth()
+  findAllByIdAmbit(@Param('id') id: string){
+    return this.perspectiveService.findAllByIdAmbit(+id);
+  }
+
   @Patch(':id')
   @Auth('ADMIN')
   @ApiBearerAuth()

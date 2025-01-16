@@ -20,35 +20,38 @@ export class PerspectiveService extends PrismaClient implements OnModuleInit {
 
   async findAll() {
     return await this.perspectives.findMany({
-      where: {deleted: false}
+      where: { deleted: false }
     });
   }
 
   async findOne(id: number) {
-    
+
     const perspective = await this.perspectives.findUnique({
-      where: {id_perspective: id,
+      where: {
+        id_perspective: id,
         deleted: false
       }
     });
 
-    if(!perspective)
+    if (!perspective)
       throw new NotFoundException(`Perspective with id ${id} not found`);
     return perspective;
   }
 
   async update(id: number, updatePerspectiveDto: UpdatePerspectiveDto) {
-    
+
     const perspective = await this.perspectives.findUnique({
-      where: {id_perspective: id, 
+      where: {
+        id_perspective: id,
         deleted: false
       }
     });
 
-    if(!perspective)
+    if (!perspective)
       throw new NotFoundException(`Perpsective with id ${id} not found`);
     return this.perspectives.update({
-      where: {id_perspective: id,
+      where: {
+        id_perspective: id,
         deleted: false
       },
       data: updatePerspectiveDto,
@@ -56,19 +59,36 @@ export class PerspectiveService extends PrismaClient implements OnModuleInit {
   }
 
   async remove(id: number) {
-    
+
     const perspective = await this.perspectives.findUnique({
-      where: {id_perspective: id}
+      where: { id_perspective: id }
     });
 
-    if(!perspective)
+    if (!perspective)
       throw new NotFoundException(`Perspective with id ${id} not found`);
 
     return this.perspectives.update({
-      where: {id_perspective: id},
+      where: { id_perspective: id },
       data: {
         deleted: true
       },
+    });
+  }
+
+  async findAllByIdAmbit(id: number) {
+
+    const array = this.perspectives.findMany({
+      where: {
+        id_ambit: id,
+        deleted: false
+      }
+    });
+
+    return this.perspectives.findMany({
+      where: {
+        id_ambit: id,
+        deleted: false
+      }
     });
   }
 }

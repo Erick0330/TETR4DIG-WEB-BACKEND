@@ -47,4 +47,11 @@ export class QuestionsController {
   remove(@Param('id') id: string) {
     return this.questionsService.remove(+id);
   }
+
+  @Get('dimension/:id')
+  @ApiBearerAuth()
+  findAllByIdDimension(@Param('id') id: string){
+    return this.questionsService.findAllByIdDimension(+id);
+  }
+
 }

@@ -19,6 +19,17 @@ model Users {
   email    String @unique
   password String
   rol      String @default("USER")
+  userTest UserTests[]
+}
+
+model UserTests {
+  id Int @id @default(autoincrement())
+  id_user Int
+  testDate DateTime
+  ambits_result String
+  perspectives_result String
+  dimensions_result String
+  user Users @relation(fields: [id_user], references: [id])
 }
 
 
@@ -62,3 +73,4 @@ model Ambits {
   delete Boolean @default(false)
   perspective Perspectives[]
 }
+

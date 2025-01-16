@@ -5,7 +5,7 @@ import { UpdateAmbitDto } from './dto/update-ambit.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 
 @Controller('ambit')
@@ -33,11 +33,7 @@ export class AmbitController {
   }
 
   @Patch(':id')
-  @Auth('ADMIN')
-  @ApiBearerAuth()
   update(@Param('id') id: string, @Body() updateambitDto: UpdateAmbitDto) {
-
-
     return this.ambitService.update(+id, updateambitDto);
   }
 
@@ -47,4 +43,6 @@ export class AmbitController {
   remove(@Param('id') id: string) {
     return this.ambitService.remove(+id);
   }
+
+
 }

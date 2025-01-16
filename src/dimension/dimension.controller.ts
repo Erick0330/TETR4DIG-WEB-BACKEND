@@ -45,4 +45,11 @@ export class DimensionController {
   remove(@Param('id') id: string) {
     return this.dimensionService.remove(+id);
   }
+
+  @Get('perspective/:id')
+  @ApiBearerAuth()
+  findAllByIdPerspective(@Param('id') id: string){
+    return this.dimensionService.findAllByIdPerspective(+id);
+  }
+
 }

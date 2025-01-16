@@ -73,4 +73,14 @@ export class DimensionService extends PrismaClient implements OnModuleInit {
       },
     });
   }
+
+  async findAllByIdPerspective(id: number){
+
+    return this.dimensions.findMany({
+      where:{
+        id_perspective: id,
+        deleted: false
+      }
+    });
+  }
 }

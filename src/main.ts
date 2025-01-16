@@ -14,7 +14,10 @@ async function bootstrap() {
     })
   );
   
-  app.enableCors();
+  app.enableCors({
+    origin: 'http://localhost:3000', // Cambia esto según tu frontend
+    allowedHeaders: ['Authorization', 'Content-Type'],
+  });
 
   const config = new DocumentBuilder()
     .setTitle("TETR4DIG Documentation")

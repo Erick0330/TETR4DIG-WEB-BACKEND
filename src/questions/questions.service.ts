@@ -74,4 +74,14 @@ export class QuestionsService extends PrismaClient implements OnModuleInit {
       },
     });
   }
+
+  async findAllByIdDimension(id: number){
+
+    return this.questions.findMany({
+      where:{
+        id_dimension: id,
+        deleted: false
+      }
+    });
+  }
 }

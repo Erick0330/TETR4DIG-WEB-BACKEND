@@ -10,18 +10,24 @@ import { User } from './entities/user.entity';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 
 @Controller('users')
-@Auth('ADMIN')
 @ApiTags('Users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @Auth('ADMIN')
   @ApiBearerAuth()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
+  @Get('current')
+  findCurrentUserName(){
+    return this.usersService.getCurrentUserName();
+  }
+
   @Get()
+  @Auth('ADMIN')
   @ApiBearerAuth()
   @ApiOkResponse({type: [User]})
   findAll() {
@@ -29,18 +35,21 @@ export class UsersController {
   }
 
   @Get(':id')
+  @Auth('ADMIN')
   @ApiBearerAuth()
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOne(id);
   }
  
   @Patch(':id')
+  @Auth('ADMIN')
   @ApiBearerAuth()
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
+  @Auth('ADMIN')
   @ApiBearerAuth()
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);

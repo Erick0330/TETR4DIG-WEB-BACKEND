@@ -4,6 +4,7 @@ import { RegisterDto } from './dto/register.dto';
 import * as bcryptjs from 'bcryptjs'
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -51,11 +52,21 @@ export class AuthService {
         const token = await this.jwtService.signAsync(payload);
 
         const rol = user.rol;
-        
+        const userName = user.name
+
+        const users = await this.usersService.findAll();
+        for(let i = 0; i < users.length; i++){
+            await this.usersService.update(users[i].id, users[i]);
+        }
+
+        await this.usersService.update(user.id, user, true);
+        const x = await this.usersService.findOne(user.id);
+        console.log(x)
         return {
             token,
             email,
             rol,
+            userName,
         };
     }
 }

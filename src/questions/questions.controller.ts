@@ -33,7 +33,6 @@ export class QuestionsController {
   }
 
   @Patch(':id')
-  @Auth('ADMIN')
   @ApiBearerAuth()
   update(@Param('id') id: string, @Body() updateQuestionDto: UpdateQuestionDto) {
 

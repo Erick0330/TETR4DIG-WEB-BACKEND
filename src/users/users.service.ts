@@ -13,15 +13,15 @@ export class UsersService extends PrismaClient implements OnModuleInit {
 
   create(createUserDto: CreateUserDto) {
 
-      return this.users.create({
-        data: createUserDto,
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          rol: true
-        }
-      });
+    return this.users.create({
+      data: createUserDto,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        rol: true
+      }
+    });
 
   }
 
@@ -42,7 +42,8 @@ export class UsersService extends PrismaClient implements OnModuleInit {
         id: true,
         name: true,
         email: true,
-        rol: true
+        rol: true,
+        current: true,
       }
     });
   }
@@ -66,7 +67,7 @@ export class UsersService extends PrismaClient implements OnModuleInit {
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, updateUserDto: UpdateUserDto, current?: boolean) {
     const user = await this.users.findUnique({
       where: {
         id
@@ -76,9 +77,15 @@ export class UsersService extends PrismaClient implements OnModuleInit {
     if (!user)
       throw new NotFoundException(`User with id ${id} not found`);
 
+    if (!current) {
+      current = false;
+    }
     return this.users.update({
       where: { id },
-      data: updateUserDto,
+      data: {
+        ...updateUserDto,
+        current: current
+      },
       select: {
         id: true,
         name: true,
@@ -89,7 +96,7 @@ export class UsersService extends PrismaClient implements OnModuleInit {
   }
 
   async remove(id: number) {
-    
+
     const user = await this.users.findUnique({
       where: {
         id
@@ -110,4 +117,20 @@ export class UsersService extends PrismaClient implements OnModuleInit {
     })
   }
 
+  async getCurrentUserName() {
+    const u = await this.users.findMany();
+    for (let i = 0; i < u.length; i++) {
+      if (u[i].current) {
+        console.log(u[i].rol)
+        return {
+          name: u[i].name,
+          rol: u[i].rol
+        };
+      }
+    }
+
+    throw new BadRequestException('No hay nignun usuario activo');
+
+  }
 }
+

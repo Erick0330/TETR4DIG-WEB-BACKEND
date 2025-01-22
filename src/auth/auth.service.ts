@@ -36,15 +36,15 @@ export class AuthService {
         }
     }
 
-    async login({email, password}: LoginDto) {
+    async login({ email, password }: LoginDto) {
         const user = await this.usersService.findOneByEmail(email);
 
-        if(!user)
+        if (!user)
             throw new NotFoundException(`No se encontro el usuario con el email ${email}`)
 
         const isPasswordValid = await bcryptjs.compare(password, user.password);
 
-        if(!isPasswordValid)
+        if (!isPasswordValid)
             throw new NotFoundException("La contraseña de este usuario es incorrecta");
 
         const payload = { email: user.email, rol: user.rol };
@@ -52,21 +52,15 @@ export class AuthService {
         const token = await this.jwtService.signAsync(payload);
 
         const rol = user.rol;
-        const userName = user.name
+        const userName = user.name;
+        const id = user.id;
 
-        const users = await this.usersService.findAll();
-        for(let i = 0; i < users.length; i++){
-            await this.usersService.update(users[i].id, users[i]);
-        }
-
-        await this.usersService.update(user.id, user, true);
-        const x = await this.usersService.findOne(user.id);
-        console.log(x)
         return {
             token,
             email,
             rol,
             userName,
+            id,
         };
     }
 }

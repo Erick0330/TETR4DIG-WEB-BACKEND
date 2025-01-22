@@ -15,7 +15,7 @@ async function bootstrap() {
   );
   
   app.enableCors({
-    origin: 'http://localhost:3000', // Cambia esto según tu frontend
+    origin: 'http://localhost:3000',
     allowedHeaders: ['Authorization', 'Content-Type'],
   });
 

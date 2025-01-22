@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException, OnModuleInit } from
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaClient } from '@prisma/client';
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class UsersService extends PrismaClient implements OnModuleInit {
@@ -11,10 +12,15 @@ export class UsersService extends PrismaClient implements OnModuleInit {
     console.log("Conectado");
   }
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
 
     return this.users.create({
-      data: createUserDto,
+      data: {
+        name: createUserDto.name,
+        email: createUserDto.email,
+        rol: createUserDto.rol,
+        password:  await bcryptjs.hash(createUserDto.password, 10)
+      },
       select: {
         id: true,
         name: true,
@@ -43,7 +49,6 @@ export class UsersService extends PrismaClient implements OnModuleInit {
         name: true,
         email: true,
         rol: true,
-        current: true,
       }
     });
   }
@@ -67,7 +72,7 @@ export class UsersService extends PrismaClient implements OnModuleInit {
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto, current?: boolean) {
+  async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.users.findUnique({
       where: {
         id
@@ -77,14 +82,10 @@ export class UsersService extends PrismaClient implements OnModuleInit {
     if (!user)
       throw new NotFoundException(`User with id ${id} not found`);
 
-    if (!current) {
-      current = false;
-    }
     return this.users.update({
       where: { id },
       data: {
-        ...updateUserDto,
-        current: current
+        ...updateUserDto
       },
       select: {
         id: true,
@@ -117,20 +118,5 @@ export class UsersService extends PrismaClient implements OnModuleInit {
     })
   }
 
-  async getCurrentUserName() {
-    const u = await this.users.findMany();
-    for (let i = 0; i < u.length; i++) {
-      if (u[i].current) {
-        console.log(u[i].rol)
-        return {
-          name: u[i].name,
-          rol: u[i].rol
-        };
-      }
-    }
-
-    throw new BadRequestException('No hay nignun usuario activo');
-
-  }
 }
 

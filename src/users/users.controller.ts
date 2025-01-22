@@ -21,10 +21,6 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Get('current')
-  findCurrentUserName(){
-    return this.usersService.getCurrentUserName();
-  }
 
   @Get()
   @Auth('ADMIN')

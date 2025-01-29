@@ -125,10 +125,11 @@ export class UserTestService extends PrismaClient implements OnModuleInit{
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id_u: number, id: number) {
     const user_test = await this.userTests.findUnique({
       where: {
         id: id,
+        id_user: id_u
       }
     });
         

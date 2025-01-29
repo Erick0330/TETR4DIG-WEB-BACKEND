@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaClient } from '@prisma/client';
 import * as bcryptjs from 'bcryptjs';
+import { UserTest } from 'src/user_test/entities/user_test.entity';
 
 @Injectable()
 export class UsersService extends PrismaClient implements OnModuleInit {
@@ -19,7 +20,7 @@ export class UsersService extends PrismaClient implements OnModuleInit {
         name: createUserDto.name,
         email: createUserDto.email,
         rol: createUserDto.rol,
-        password:  await bcryptjs.hash(createUserDto.password, 10)
+        password: await bcryptjs.hash(createUserDto.password, 10)
       },
       select: {
         id: true,
@@ -107,6 +108,11 @@ export class UsersService extends PrismaClient implements OnModuleInit {
     if (!user)
       throw new NotFoundException(`User with id ${id} not found`);
 
+
+    await this.userTests.deleteMany({
+      where: {id_user: id}
+    });
+    
     return this.users.delete({
       where: { id },
       select: {

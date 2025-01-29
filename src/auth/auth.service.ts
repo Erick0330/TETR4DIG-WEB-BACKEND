@@ -5,13 +5,15 @@ import * as bcryptjs from 'bcryptjs'
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/entities/user.entity';
+import { UserTestService } from 'src/user_test/user_test.service';
 
 @Injectable()
 export class AuthService {
 
     constructor(
         private readonly jwtService: JwtService,
-        private readonly usersService: UsersService
+        private readonly usersService: UsersService,
+        private readonly usersTestService: UserTestService,
     ) { }
 
     async register({ name, email, password, rol }: RegisterDto) {
@@ -26,7 +28,7 @@ export class AuthService {
             name,
             email,
             rol,
-            password: await bcryptjs.hash(password, 10)
+            password,
         });
 
         return {
@@ -54,13 +56,19 @@ export class AuthService {
         const rol = user.rol;
         const userName = user.name;
         const id = user.id;
-
+        const idLT = await this.usersTestService.findAll(id);
+        let currentReportId = 0;
+        if (idLT.length > 0) {
+            idLT.sort((a, b) => a.id - b.id);
+            currentReportId = idLT[idLT.length - 1].id;
+        }
         return {
             token,
             email,
             rol,
             userName,
             id,
+            currentReportId,
         };
     }
 }

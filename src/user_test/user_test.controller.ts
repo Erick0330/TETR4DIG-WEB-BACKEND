@@ -18,8 +18,8 @@ export class UserTestController {
     return this.userTestService.findAll(+id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userTestService.findOne(+id);
+  @Get(':id_u/:id')
+  findOne(@Param('id') id: string, @Param('id_u') id_u:string) {
+    return this.userTestService.findOne(+id_u, +id);
   }
 }

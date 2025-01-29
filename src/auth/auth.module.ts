@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { UsersModule } from 'src/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { envs } from 'src/config';
+import { UserTestModule } from 'src/user_test/user_test.module';
 
 @Module({
   imports: [UsersModule,
@@ -11,7 +12,8 @@ import { envs } from 'src/config';
       global: true,
       secret: envs.jwtConstants.secret,
       signOptions: { expiresIn: '1d'},
-    })
+    }),
+    UserTestModule,
   ],
   controllers: [AuthController],
   providers: [AuthService]

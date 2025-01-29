@@ -86,7 +86,9 @@ export class UsersService extends PrismaClient implements OnModuleInit {
     return this.users.update({
       where: { id },
       data: {
-        ...updateUserDto
+        email: updateUserDto.email,
+        name: updateUserDto.name,
+        rol: updateUserDto.rol,
       },
       select: {
         id: true,
